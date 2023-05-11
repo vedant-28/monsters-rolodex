@@ -6,6 +6,7 @@ class App extends Component {
     super();
     this.state = {
       monsters: [],
+      searchFieldValue: '',// initialized in state, so can be accesed in whole component.
     };
   }
 
@@ -19,24 +20,38 @@ class App extends Component {
     ));
   }
 
+  // method written outside of render(),
+  // as when update state, component is re-rendered.
+  // Inside onChange={}, this was just an arraow function which will not be stored in memory.
+  // So whn re-rendering occurs; this callback method will be re-initialized.
+  // This can cause performance issues when there are many of such callbacks 
+  // present in component event callback.
+  // Now this method will be created only once when component reders for first time.
+  onSearchFieldValueChange = (e) => {
+    console.log(e.target.value);
+    const searchFieldValue = e.target.value.toLowerCase();
+    this.setState(() => {
+      return { searchFieldValue };
+    });
+  }
+
   render() {
+    // ES6 destructuring used to access state variables w/o having to use "this.state." prefix
+    const { monsters, searchFieldValue } = this.state;
+    // ES6 destructuring used to access class methods w/o having to use "this." prefix
+    const { onSearchFieldValueChange } = this;
+
+    const filteredList = monsters.filter((monster) => {
+      return monster.name.toLowerCase().includes(searchFieldValue);
+    });
     return (
       <div className="App">
-        <input className='search-bar' type='search' placeholder='search monsters' onChange={
-          (e) => {
-            console.log(e.target.value);
-            const searchValue = e.target.value.toLowerCase();
-            const filteredList = this.state.monsters.filter((monster) => {
-              return monster.name.toLowerCase().includes(searchValue);
-            });
-
-            this.setState(() => {
-              return { monsters: filteredList };
-            });
-          }
+        <input className='search-bar' type='search' placeholder='search monsters' 
+        onChange={
+          onSearchFieldValueChange // accessing class method
         }/>
         {
-          this.state.monsters.map((monster) => {
+          filteredList.map((monster) => {
             return <div key = {monster.id}>
               <h1>{monster.name}</h1>
             </div>
