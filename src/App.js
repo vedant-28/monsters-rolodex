@@ -1,18 +1,19 @@
 import { Component } from "react";
-import "./App.css";
-import CardList from "./components/card-list/card-list.component";
+import './App.css';
+import CardList from './components/card-list/card-list.component';
+import SearchBox from './components/search-box/search-box.component';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       monsters: [],
-      searchFieldValue: "", // initialized in state, so can be accesed in whole component.
+      searchFieldValue: '', // initialized in state, so can be accesed in whole component.
     };
   }
 
   componentDidMount() {
-    fetch("https://jsonplaceholder.typicode.com/users")
+    fetch('https://jsonplaceholder.typicode.com/users')
       .then((response) => response.json())
       .then((users) =>
         this.setState(() => {
@@ -46,15 +47,8 @@ class App extends Component {
       return monster.name.toLowerCase().includes(searchFieldValue);
     });
     return (
-      <div className="App">
-        <input
-          className="search-bar"
-          type="search"
-          placeholder="search monsters"
-          onChange={
-            onSearchFieldValueChange // accessing class method
-          }
-        />
+      <div className='App'>
+        <SearchBox className='monsters-search-box' placeholder='search-monsters' onChangeHandler={onSearchFieldValueChange}/>
         <CardList monsters={filteredList} />
       </div>
     );
