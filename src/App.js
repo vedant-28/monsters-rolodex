@@ -1,31 +1,31 @@
-import { Component } from 'react';
-import './App.css';
-import CardList from './components/card-list/card-list.component';
+import { Component } from "react";
+import "./App.css";
+import CardList from "./components/card-list/card-list.component";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       monsters: [],
-      searchFieldValue: '',// initialized in state, so can be accesed in whole component.
+      searchFieldValue: "", // initialized in state, so can be accesed in whole component.
     };
   }
 
   componentDidMount() {
-    fetch('https://jsonplaceholder.typicode.com/users')
-    .then((response) => response.json())
-    .then((users) => this.setState(
-      () => {
-        return { monsters: users };
-      }
-    ));
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then((response) => response.json())
+      .then((users) =>
+        this.setState(() => {
+          return { monsters: users };
+        })
+      );
   }
 
   // method written outside of render(),
   // as when update state, component is re-rendered.
   // Inside onChange={}, this was just an arraow function which will not be stored in memory.
   // So whn re-rendering occurs; this callback method will be re-initialized.
-  // This can cause performance issues when there are many of such callbacks 
+  // This can cause performance issues when there are many of such callbacks
   // present in component event callback.
   // Now this method will be created only once when component reders for first time.
   onSearchFieldValueChange = (e) => {
@@ -34,7 +34,7 @@ class App extends Component {
     this.setState(() => {
       return { searchFieldValue };
     });
-  }
+  };
 
   render() {
     // ES6 destructuring used to access state variables w/o having to use "this.state." prefix
@@ -47,11 +47,15 @@ class App extends Component {
     });
     return (
       <div className="App">
-        <input className='search-bar' type='search' placeholder='search monsters' 
-        onChange={
-          onSearchFieldValueChange // accessing class method
-        }/>
-        <CardList monsters={filteredList}/>
+        <input
+          className="search-bar"
+          type="search"
+          placeholder="search monsters"
+          onChange={
+            onSearchFieldValueChange // accessing class method
+          }
+        />
+        <CardList monsters={filteredList} />
       </div>
     );
   }
